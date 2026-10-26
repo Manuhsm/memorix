@@ -1,0 +1,111 @@
+/* ===== Efeitos retrofuturistas reutilizáveis =====
+   .crt-grid     grade em perspectiva no fundo (estilo synthwave)
+   .scanlines    linhas de varredura CRT por cima de tudo (sutil, não captura cliques)
+   .neon-panel   painel estilo HUD com borda luminosa e cantos "cortados"
+   .glow-*       texto com brilho neon
+   .arcade-btn   botão com aparência de controle de fliperama */
+
+.crt-grid {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgb(139 61 255 / 0.28), transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgb(34 228 255 / 0.14), transparent 55%),
+    linear-gradient(rgb(34 228 255 / 0.07) 1px, transparent 1px) 0 0 / 100% 44px,
+    linear-gradient(90deg, rgb(139 61 255 / 0.08) 1px, transparent 1px) 0 0 / 44px 100%,
+    var(--color-bg);
+}
+
+.scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  background: repeating-linear-gradient(to bottom, transparent 0 2px, rgb(0 0 0 / 0.18) 2px 3px);
+  mix-blend-mode: multiply;
+}
+.scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 55%, rgb(0 0 0 / 0.55));
+}
+
+.neon-panel {
+  --glow: var(--color-neon-cyan);
+  position: relative;
+  background: linear-gradient(180deg, rgb(16 24 48 / 0.92), rgb(10 16 32 / 0.92));
+  border: 1px solid color-mix(in srgb, var(--glow) 55%, transparent);
+  border-radius: 6px;
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.6) inset,
+    0 0 18px color-mix(in srgb, var(--glow) 28%, transparent);
+}
+.neon-panel::before,
+.neon-panel::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--glow);
+  pointer-events: none;
+}
+.neon-panel::before { top: -2px; left: -2px; border-right: 0; border-bottom: 0; }
+.neon-panel::after { bottom: -2px; right: -2px; border-left: 0; border-top: 0; }
+.neon-panel[data-tone='magenta'] { --glow: var(--color-neon-magenta); }
+.neon-panel[data-tone='green'] { --glow: var(--color-neon-green); }
+.neon-panel[data-tone='yellow'] { --glow: var(--color-neon-yellow); }
+.neon-panel[data-tone='purple'] { --glow: var(--color-neon-purple); }
+.neon-panel[data-tone='red'] { --glow: var(--color-neon-red); }
+
+.glow-cyan { color: var(--color-neon-cyan); text-shadow: 0 0 6px var(--color-neon-cyan), 0 0 22px rgb(34 228 255 / 0.55); }
+.glow-magenta { color: var(--color-neon-magenta); text-shadow: 0 0 6px var(--color-neon-magenta), 0 0 22px rgb(255 43 214 / 0.55); }
+.glow-green { color: var(--color-neon-green); text-shadow: 0 0 6px var(--color-neon-green), 0 0 22px rgb(57 255 136 / 0.55); }
+.glow-yellow { color: var(--color-neon-yellow); text-shadow: 0 0 6px var(--color-neon-yellow), 0 0 22px rgb(255 233 74 / 0.5); }
+.glow-red { color: var(--color-neon-red); text-shadow: 0 0 6px var(--color-neon-red), 0 0 22px rgb(255 59 107 / 0.5); }
+
+.arcade-btn {
+  --c: var(--color-neon-cyan);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 52px;
+  padding: 0.85rem 1.4rem;
+  font-family: var(--font-arcade);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--c);
+  background: color-mix(in srgb, var(--c) 10%, var(--color-surface));
+  border: 2px solid var(--c);
+  border-radius: 999px;
+  box-shadow: 0 5px 0 color-mix(in srgb, var(--c) 45%, #000), 0 0 16px color-mix(in srgb, var(--c) 40%, transparent);
+  cursor: pointer;
+  transition: transform 90ms, box-shadow 90ms, background 150ms;
+  user-select: none;
+  text-align: center;
+}
+.arcade-btn:hover:not(:disabled) { background: color-mix(in srgb, var(--c) 22%, var(--color-surface)); }
+.arcade-btn:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 1px 0 color-mix(in srgb, var(--c) 45%, #000), 0 0 10px color-mix(in srgb, var(--c) 40%, transparent); }
+.arcade-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.arcade-btn[data-tone='magenta'] { --c: var(--color-neon-magenta); }
+.arcade-btn[data-tone='green'] { --c: var(--color-neon-green); }
+.arcade-btn[data-tone='yellow'] { --c: var(--color-neon-yellow); }
+.arcade-btn[data-tone='red'] { --c: var(--color-neon-red); }
+.arcade-btn[data-size='lg'] { min-height: 64px; font-size: 0.95rem; padding: 1rem 2rem; }
+
+.field {
+  width: 100%;
+  min-height: 56px;
+  padding: 0.8rem 1rem;
+  font-family: var(--font-arcade);
+  font-size: 0.9rem;
+  color: var(--color-ink);
+  background: var(--color-bg);
+  border: 2px solid var(--color-line);
+  border-radius: 6px;
+}
+.field:focus { border-color: var(--color-neon-cyan); box-shadow: 0 0 14px rgb(34 228 255 / 0.4); outline: none; }
+.field[aria-invalid='true'] { border-color: var(--color-neon-red); }

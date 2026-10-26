@@ -1,0 +1,70 @@
+/* ===== Elementos do jogo: botões coloridos, vidas, animações ===== */
+
+.pad {
+  --c: var(--color-neon-green);
+  position: relative;
+  aspect-ratio: 1 / 1;
+  min-height: 120px;
+  border-radius: 18px;
+  border: 3px solid color-mix(in srgb, var(--c) 70%, #000);
+  background:
+    radial-gradient(circle at 30% 25%, color-mix(in srgb, var(--c) 35%, transparent), transparent 55%),
+    color-mix(in srgb, var(--c) 14%, var(--color-surface));
+  box-shadow: 0 0 0 2px rgb(0 0 0 / 0.7) inset, 0 6px 0 color-mix(in srgb, var(--c) 40%, #000);
+  cursor: pointer;
+  transition: transform 80ms, box-shadow 80ms, filter 80ms, background 80ms;
+  touch-action: manipulation;
+  color: var(--c);
+  font-family: var(--font-arcade);
+  font-size: 1rem;
+}
+.pad:disabled { cursor: not-allowed; }
+.pad[data-lit='true'] {
+  background:
+    radial-gradient(circle at 30% 25%, #fff, transparent 45%),
+    var(--c);
+  box-shadow:
+    0 0 0 2px rgb(0 0 0 / 0.5) inset,
+    0 0 38px 8px color-mix(in srgb, var(--c) 75%, transparent),
+    0 0 90px 20px color-mix(in srgb, var(--c) 35%, transparent);
+  transform: translateY(4px) scale(1.02);
+  color: #000;
+}
+.pad[data-ready='true']:hover { filter: brightness(1.25); }
+.pad[data-ready='false'] { filter: saturate(0.7) brightness(0.8); }
+.pad[data-lit='true'][data-ready='false'] { filter: none; }
+
+.heart { transition: transform 200ms, opacity 200ms; }
+.heart[data-lost='true'] { opacity: 0.25; transform: scale(0.85); }
+.heart-pop { animation: heartPop 520ms ease-out; }
+
+.shake { animation: shake 420ms; }
+.flash-red { animation: flashRed 520ms; }
+.flash-green { animation: flashGreen 700ms; }
+.pulse-glow { animation: pulseGlow 2.4s ease-in-out infinite; }
+.logo-flicker { animation: flicker 5s infinite; }
+.float-y { animation: floatY 4s ease-in-out infinite; }
+
+.confetti i {
+  position: absolute;
+  top: -10px;
+  width: 8px;
+  height: 8px;
+  animation: fall linear infinite;
+}
+
+@keyframes heartPop { 0% { transform: scale(1.5); } 100% { transform: scale(1); } }
+@keyframes shake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-5px); } 80% { transform: translateX(5px); } }
+@keyframes flashRed { 0% { box-shadow: 0 0 0 0 rgb(255 59 107 / 0.9); } 100% { box-shadow: 0 0 60px 30px rgb(255 59 107 / 0); } }
+@keyframes flashGreen { 0% { box-shadow: 0 0 0 0 rgb(57 255 136 / 0.9); } 100% { box-shadow: 0 0 70px 30px rgb(57 255 136 / 0); } }
+@keyframes pulseGlow { 0%,100% { filter: drop-shadow(0 0 4px var(--color-neon-cyan)); } 50% { filter: drop-shadow(0 0 16px var(--color-neon-magenta)); } }
+@keyframes flicker { 0%,19%,21%,23%,100% { opacity: 1; } 20%,22% { opacity: 0.72; } }
+@keyframes floatY { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes fall { to { transform: translateY(105vh) rotate(540deg); } }
+
+/* Acessibilidade: respeita "reduzir movimento" do sistema operacional. */
+@media (prefers-reduced-motion: reduce) {
+  .shake, .flash-red, .flash-green, .pulse-glow, .logo-flicker, .float-y, .heart-pop,
+  .confetti i { animation: none !important; }
+  .arcade-btn, .pad, .heart { transition: none; }
+}
