@@ -1,9 +1,8 @@
-import { defineConfig } from 'vite';
+/// <reference types="vitest/config" />
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
-// Em desenvolvimento, /api é repassado ao backend: celulares na mesma rede
-// acessam só o frontend (porta 5173) e não precisam de CORS.
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
