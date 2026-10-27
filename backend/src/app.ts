@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import express from 'express';
 import { createApp } from './createApp.js';
 import { createPool } from './database/pool.js';
@@ -8,7 +7,7 @@ export const pool = createPool();
 export const repo = new PgGameRepository(pool);
 
 const app = express();
-app.set('trust proxy', 1); // atrás da Vercel, o IP real vem em X-Forwarded-For
+app.set('trust proxy', 1);
 
 app.use(
   createApp({

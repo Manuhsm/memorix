@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import app, { pool, repo } from './app.js';
 
 const port = Number(process.env.PORT ?? 3333);
