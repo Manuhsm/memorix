@@ -1,14 +1,19 @@
 import pg from 'pg';
 
-/** Credenciais vêm SEMPRE de variáveis de ambiente (PGHOST, PGPORT, PGDATABASE, PGUSER, PGPASSWORD). */
+/** A conexão vem de DATABASE_URL (ex.: postgresql://usuario:senha@host:porta/banco). */
 export function createPool(): pg.Pool {
+  const connectionString = process.env.DATABASE_URL;
+  if (!connectionString) {
+    throw new Error('DATABASE_URL não definida.');
+  }
+
+  // SSL só para bancos remotos (Supabase); o Postgres local não usa SSL.
+  const isLocal = /@(localhost|127\.0\.0\.1)(:|\/)/.test(connectionString);
+
   const pool = new pg.Pool({
-    host: process.env.PGHOST ?? 'localhost',
-    port: Number(process.env.PGPORT ?? 5432),
-    database: process.env.PGDATABASE ?? 'banco_memorix',
-    user: process.env.PGUSER,
-    password: process.env.PGPASSWORD,
-    max: 10,
+    connectionString,
+    ssl: isLocal ? false : { rejectUnauthorized: false },
+    max: process.env.VERCEL ? 1 : 10,
     connectionTimeoutMillis: 4000,
     idleTimeoutMillis: 30000,
   });
