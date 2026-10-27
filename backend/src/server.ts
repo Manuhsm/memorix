@@ -1,6 +1,7 @@
 import 'dotenv/config';
-import app, { pool, repo } from './app.js';
-
+import app from './app.js';
+import { pool, repo } from './container.js';
+// ... resto igual
 const port = Number(process.env.PORT ?? 3333);
 
 const server = app.listen(port, '0.0.0.0', () => {

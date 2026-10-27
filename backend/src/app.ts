@@ -1,10 +1,6 @@
 import express from 'express';
 import { createApp } from './createApp.js';
-import { createPool } from './database/pool.js';
-import { PgGameRepository } from './repositories/pgGameRepository.js';
-
-export const pool = createPool();
-export const repo = new PgGameRepository(pool);
+import { repo } from './container.js';
 
 const app = express();
 app.set('trust proxy', 1);
